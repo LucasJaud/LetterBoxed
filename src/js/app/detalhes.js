@@ -45,12 +45,15 @@ function initDetalhes() {
         if (!filmeId) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/filmes`, {
+            const response = await fetch(`http://localhost:3000/filmes/${filmeId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            const data = await response.json();
 
-            const filme = data.filmes.find(f => f.id == filmeId);
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+
+            const filme = await response.json();
 
             if (filme) {
                 console.log("Dados da entidade Filme:", filme);
