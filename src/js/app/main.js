@@ -4,6 +4,8 @@
 // ==========================================
 
 import App from '../core/App.js';
+import './detalhes.js';
+
 
 // ==========================================
 // LÓGICA DA PÁGINA DO CATÁLOGO

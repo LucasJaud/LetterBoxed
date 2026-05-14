@@ -64,8 +64,9 @@
     // REGISTRO DE OUTRAS PÁGINAS
     // ==========================================
 
-    // Importa e registra a página do catálogo
+    // Importa e registra a página do catálogo e detalhes
     await import('./main.js');
+    await import('./detalhes.js');
 
     // ==========================================
     // INICIALIZAÇÃO

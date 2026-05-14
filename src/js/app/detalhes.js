@@ -77,6 +77,8 @@ function initDetalhes() {
     carregarDetalhesDoFilme();
 }
 
+App.createPage('/detalhes.html', initDetalhes);
+App.createPage('/detalhes', initDetalhes);
 App.createPage('/src/detalhes.html', initDetalhes);
 App.createPage('/src/detalhes', initDetalhes);
 
