@@ -15,15 +15,16 @@
 
 ## 💻 Sobre o Projeto
 
-O **LetterBoxed** oferece um espaço limpo e direto para registro de opiniões sobre filmes. O sistema possui uma API robusta em Node.js com persistência via PostgreSQL e ORM Sequelize, alimentada inicialmente pelos dados do TMDB e servida de forma reativa no front-end.
+O **LetterBoxed** nasceu para resolver a dificuldade de manter um histórico organizado de filmes assistidos. Diferente de redes sociais complexas, nosso sistema oferece um espaço limpo e direto para estudantes de TI registrarem suas opiniões e compararem o "gosto técnico" (baseado nas notas oficiais do TmDB) com o "gosto popular" da sala de aula.
 
 ## 🚀 Funcionalidades
 
 - **Autenticação JWT:** Sistema de login seguro com tokens.
-- **Catálogo SQL Local:** Listagem paginada e otimizada de filmes diretamente do banco PostgreSQL.
+- **Catálogo Dinâmico:** Integração em tempo real com a API TmDB para busca automática de capas, sinopses e dados técnicos.
 - **Filtros Dinâmicos:** Pesquisa instantânea por título, gênero, ano, diretor e roteiristas.
-- **Integração de Seed:** Importação sob demanda de filmes técnicos e sinopses a partir da API TmDB.
+- **Gestão de Filmes:** Adição de títulos a listas personalizadas ("Assistidos" e "Favoritos").
 - **Avaliações e Críticas:** Atribuição de notas (1 a 10) e resenhas textuais de usuários.
+- **Ranking Social:** Comparação da nota global do filme com a nota média atribuída pelos alunos da turma.
 
 ---
 
@@ -71,18 +72,39 @@ docker-compose down
 
 ---
 
-## 📁 Estrutura da Arquitetura
+## 📁 Estrutura do Projeto
+
+Arquitetura **SPA (Single Page Application)** - Uma única página que carrega todas as views dinamicamente:
 
 ```text
 📦 LetterBoxed
- ┣ 📂 src
- ┃ ┣ 📂 css           # Estilos globais e componentes
- ┃ ┣ 📂 js
- ┃ ┃ ┣ 📂 api         # Controladores, Rotas e Casos de Uso (Clean Architecture)
- ┃ ┃ ┣ 📂 bd          # Configurações de Conexão e Repositórios
- ┃ ┃ ┣ 📂 entidades   # Classes de Domínio Puro
- ┃ ┃ ┣ 📂 models      # Modelos e Relacionamentos do Sequelize
- ┃ ┃ ┗ 📂 migrations  # Histórico de Evolução do Banco SQL
- ┃ ┗ 📜 catalogo.html # Tela Principal de Listagem
- ┗ 📜 index.html      # Tela de Login / Autenticação
+ ├─ 📄 index.html ⭐ (Página única - entry point)
+ │
+ ├─ 📁 src/
+    ├─ 📁 css/
+    │  ├─ style.css
+    │  └─ components.css
+    │
+    ├─ 📁 js/
+    │  ├─ 📄 main.js ⭐ (Orquestrador SPA)
+    │  ├─ 📁 core/
+    │  │  ├─ Router.js
+    │  │  ├─ App.js
+    │  │  └─ Reactivity.js
+    │  ├─ 📁 views/ ⭐ (Views modulares)
+    │  │  ├─ loginView.js
+    │  │  ├─ registroView.js
+    │  │  ├─ catalogoView.js
+    │  │  ├─ perfilView.js
+    │  │  └─ detalhesView.js
+    │  ├─ 📁 api/
+    │  ├─ 📁 models/
+    │  └─ 📁 bd/
+    │
+    └─ 📁 pages/
+       ├─ catalogo.html
+       ├─ perfil.html
+       ├─ detalhes.html
+       └─ registro.html
+ 
 ```

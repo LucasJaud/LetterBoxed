@@ -2,6 +2,12 @@
 // login.js — Bootstrap da aplicação + Lógica de Login
 // Este script roda no index.html (carregado com defer, sem type="module")
 // Por isso usamos import() dinâmico para carregar os módulos do framework.
+// 
+// ⚠️ SPA - IMPORTANTE PARA MARCOS E GABRIEL:
+// Este projeto usa Single Page Application (SPA).
+// TODO funciona a partir do index.html. Os arquivos em src/pages/
+// são mantidos APENAS COMO REFERÊNCIA VISUAL e não são utilizados.
+// Foco: index.html + views renderizadas em JavaScript via roteador hash.
 // ==========================================
 
 (async function bootstrap() {
@@ -32,33 +38,18 @@
                 return;
             }
 
-            try {
-                const resposta = await fetch('http://localhost:3000/usuarios/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: usuario, senha })
-                });
 
-                const dados = await resposta.json();
 
-                if (!resposta.ok) {
-                    alert(dados.erro || 'Erro ao fazer login!');
-                    return;
-                }
+            // TODO: Aqui entraria a chamada real para a API de autenticação
+            // const resposta = await fetch('http://localhost:3000/usuarios/login', { ... });
 
-                localStorage.setItem('token', dados.token);
-                localStorage.setItem('usuario', JSON.stringify(dados.dados));
-
-                App.navigateTo('/src/catalogo.html');
-            } catch (erro) {
-                alert('Erro de conexão ao tentar fazer login.');
-                console.error(erro);
-            }
+            // Por enquanto, navega direto para o catálogo
+            window.location.hash = '#/catalogo';
         });
     }
 
-    App.createPage('/index.html', initLogin);
-    App.createPage('/', initLogin);
+    // Inicia a página de login
+    initLogin();
 
     // ==========================================
     // REGISTRO DE OUTRAS PÁGINAS
