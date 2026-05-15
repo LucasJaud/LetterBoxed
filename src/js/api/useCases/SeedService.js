@@ -5,7 +5,7 @@ import FilmeModel from '../../models/Filme.js';
 export class SeedService {
     async executarSeed(paginas = 5, dataMinima = null) {
         console.log(`Iniciando Seed... Páginas: ${paginas}, Data Mínima: ${dataMinima || 'Nenhuma'}`);
-        
+
         let totalProcessado = 0;
         const delay = ms => new Promise(res => setTimeout(res, ms));
 
@@ -59,9 +59,9 @@ export class SeedService {
                     generosTexto,
                     detalhe.overview,
                     diretor,
-                    detalhe.vote_average,
+                    detalhe.vote_average, // Nota TMDB (External)
                     [],
-                    0,
+                    0, // Nota LetterBoxed (Internal) inicia em 0
                     posterPatch,
                     roteiristas
                 );

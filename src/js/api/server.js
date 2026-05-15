@@ -15,6 +15,7 @@ app.use(express.static('src'));
 // ==========================================
 import filmesRotas from './rotas/FilmesRotas.js';
 import usuariosRotas from './rotas/UsuariosRotas.js';
+import avaliacoesRotas from './rotas/AvaliacoesRotas.js';
 
 // Rota de teste central
 app.get('/health', (req, res) => {
@@ -27,6 +28,7 @@ app.get('/health', (req, res) => {
 // Anexando o roteador de filmes: tudo que começar com "/filmes" cai nesse gerenciador
 app.use('/filmes', filmesRotas);
 app.use('/usuarios', usuariosRotas);
+app.use('/avaliacoes', avaliacoesRotas);
 
 // Inicialização do Servidor
 app.listen(PORT, () => {

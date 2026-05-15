@@ -19,13 +19,17 @@ class Filme {
     }
 
     calcularNota() {
-        if (this.avaliacoes.length === 0) {
-            this.nota = 0;
+        if (!this.avaliacoes || this.avaliacoes.length === 0) {
+            this.notaPlataforma = 0;
             return;
         }
 
-        const soma = this.avaliacoes.reduce((acc, avaliacao) => acc + avaliacao.nota, 0);
-        this.nota = soma / this.avaliacoes.length;
+        const soma = this.avaliacoes.reduce((acc, avaliacao) => {
+            const notaNum = parseFloat(avaliacao.nota) || 0;
+            return acc + notaNum;
+        }, 0);
+        
+        this.notaPlataforma = soma / this.avaliacoes.length;
     }
 }
 
