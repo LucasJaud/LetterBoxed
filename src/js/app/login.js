@@ -18,7 +18,19 @@
     // PÁGINA DE LOGIN (index.html)
     // ==========================================
 
-    function initLogin() {
+    async function initLogin() {
+        // Carrega a view de login
+        const { loginView } = await import('../views/loginView.js');
+        const appContent = document.querySelector('#app-content');
+        if (appContent) {
+            appContent.className = 'login-page';
+            appContent.innerHTML = loginView.template();
+        }
+        const appHeader = document.querySelector('#app-header');
+        if (appHeader) {
+            appHeader.className = 'login-header';
+        }
+
         // Cria o estado reativo para os campos do formulário
         const estado = App.state({
             usuario: '',
@@ -26,11 +38,11 @@
         });
 
         // Conecta os inputs ao estado (ponte bidirecional)
-        App.bindInput('#usuario', estado, 'usuario');
-        App.bindInput('#senha', estado, 'senha');
+        App.bindInput('.login-input-usuario', estado, 'usuario');
+        App.bindInput('.login-input-senha', estado, 'senha');
 
         // Intercepta a submissão do formulário de login.
-        App.onSubmit('#form-login', async (evento) => {
+        App.onSubmit('.login-form', async (evento) => {
             const { usuario, senha } = estado;
 
             if (!usuario || !senha) {
@@ -38,18 +50,35 @@
                 return;
             }
 
+            try {
+                const response = await fetch('http://localhost:3000/usuarios/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: usuario, senha })
+                });
 
-
-            // TODO: Aqui entraria a chamada real para a API de autenticação
-            // const resposta = await fetch('http://localhost:3000/usuarios/login', { ... });
-
-            // Por enquanto, navega direto para o catálogo
-            window.location.hash = '#/catalogo';
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('usuario', JSON.stringify(data.usuario));
+                    window.location.hash = '#/catalogo';
+                } else {
+                    alert('Credenciais inválidas');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao fazer login');
+            }
         });
     }
 
-    // Inicia a página de login
-    initLogin();
+    // Registra a página de login no framework
+    App.createPage('#/login', initLogin);
+
+    // Redireciona para o login se estiver na raiz
+    if (!window.location.hash || window.location.hash === '#') {
+        window.location.hash = '#/login';
+    }
 
     // ==========================================
     // REGISTRO DE OUTRAS PÁGINAS
@@ -57,6 +86,7 @@
 
     // Importa e registra a página do catálogo
     await import('./main.js');
+    await import('./detalhes.js');
 
     // ==========================================
     // INICIALIZAÇÃO

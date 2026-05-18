@@ -9,7 +9,30 @@ import App from '../core/App.js';
 // LÓGICA DA PÁGINA DO CATÁLOGO
 // ==========================================
 
-function initCatalogo() {
+export async function initCatalogo() {
+    // Carrega o CSS no head para garantir que aplique
+    const cssPath = './src/css/catalogo.css';
+    const jaExiste = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+        .some(l => l.getAttribute('href') === cssPath);
+    if (!jaExiste) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = cssPath;
+        document.head.appendChild(link);
+    }
+
+    // Renderiza a view do catálogo
+    const { catalogoView } = await import('../views/catalogoView.js');
+    const appContent = document.querySelector('#app-content');
+    if (appContent) {
+        appContent.className = 'catalogo-page';
+        appContent.innerHTML = catalogoView.template();
+    }
+    const appHeader = document.querySelector('#app-header');
+    if (appHeader) {
+        appHeader.className = 'catalogo-header';
+    }
+
     const token = localStorage.getItem('token');
     if (!token) {
         alert('Acesso restrito. Faça login para continuar.');
@@ -34,7 +57,7 @@ function initCatalogo() {
     // BINDINGS (conecta o HTML ao estado)
     // ==========================================
 
-    App.bindList('#catalogo-filmes', estado, 'filmes', renderizarCard);
+    App.bindList('.catalogo-grid-filmes', estado, 'filmes', renderizarCard);
 
     // ==========================================
     // EVENTOS
@@ -47,14 +70,14 @@ function initCatalogo() {
         window.location.href = '/';
     });
 
-    App.onClick('#btn-buscar', (e) => {
+    App.onClick('.catalogo-btn-buscar', (e) => {
         e.preventDefault();
         console.log('[main.js] Botão de buscar clicado!');
         paginaAtual = 1;
         buscarFilmes(paginaAtual);
     });
 
-    App.onClick('#btn-ant', (e) => {
+    App.onClick('.catalogo-btn-ant', (e) => {
         e.preventDefault();
         if (paginaAtual > 1) {
             paginaAtual--;
@@ -62,7 +85,7 @@ function initCatalogo() {
         }
     });
 
-    App.onClick('#btn-prox', (e) => {
+    App.onClick('.catalogo-btn-prox', (e) => {
         e.preventDefault();
         if (paginaAtual < totalPaginas) {
             paginaAtual++;
@@ -76,14 +99,14 @@ function initCatalogo() {
 
     async function buscarFilmes(pagina = 1) {
         try {
-            const container = document.querySelector('#catalogo-filmes');
+            const container = document.querySelector('.catalogo-grid-filmes');
             if (container) {
                 container.innerHTML = '<p>Carregando filmes...</p>';
             }
 
-            const titulo = document.querySelector('#busca-filme')?.value || '';
-            const genero = document.querySelector('#filtro-genero')?.value || '';
-            const ano = document.querySelector('#filtro-ano')?.value || '';
+            const titulo = document.querySelector('.catalogo-busca-filme')?.value || '';
+            const genero = document.querySelector('.catalogo-filtro-genero')?.value || '';
+            const ano = document.querySelector('.catalogo-filtro-ano')?.value || '';
 
             console.log(`[main.js] Buscando - Página: ${pagina}, Título: "${titulo}", Gênero: "${genero}", Ano: "${ano}"`);
 
@@ -104,24 +127,24 @@ function initCatalogo() {
             paginaAtual = data.paginaCorrente || 1;
             totalPaginas = data.totalPaginas || 1;
 
-            const info = document.querySelector('#info-paginas');
+            const info = document.querySelector('.catalogo-info-paginas');
             if (info) {
                 info.textContent = `Página ${paginaAtual} de ${totalPaginas}`;
             }
 
-            const btnAnt = document.querySelector('#btn-ant');
+            const btnAnt = document.querySelector('.catalogo-btn-ant');
             if (btnAnt) {
                 btnAnt.disabled = paginaAtual <= 1;
             }
 
-            const btnProx = document.querySelector('#btn-prox');
+            const btnProx = document.querySelector('.catalogo-btn-prox');
             if (btnProx) {
                 btnProx.disabled = paginaAtual >= totalPaginas;
             }
 
         } catch (error) {
             console.error('[main.js] Erro de requisição:', error);
-            const container = document.querySelector('#catalogo-filmes');
+            const container = document.querySelector('.catalogo-grid-filmes');
             if (container) {
                 container.innerHTML = '<p style="color: red;">Erro ao buscar filmes. Verifique o console do navegador.</p>';
             }
@@ -134,15 +157,15 @@ function initCatalogo() {
 
     function renderizarCard(filme) {
         const posterHtm = filme.poster
-            ? `<img src="${filme.poster}" alt="Pôster de ${filme.titulo}" class="poster-filme">`
-            : `<div class="poster-vazio">Sem Pôster</div>`;
+            ? `<img src="${filme.poster}" alt="Pôster de ${filme.titulo}" class="catalogo-poster-filme">`
+            : `<div class="catalogo-poster-vazio">Sem Pôster</div>`;
 
         const diretorHtml = filme.diretor
             ? `<p><em>${filme.diretor}</em></p>`
             : '';
 
         return `
-            <article class="card-filme">
+            <article class="catalogo-card-filme">
                 <a href="#/detalhes/${filme.id}" style="text-decoration: none; color: inherit;">
                     ${posterHtm}
                     <h3>${filme.titulo} (${filme.ano})</h3>
@@ -151,8 +174,8 @@ function initCatalogo() {
                 <p><strong>Nota TMDB:</strong> ⭐ ${filme.nota ? filme.nota.toFixed(1) : 0} / 10</p>
                 <p><strong>Nota do Site:</strong> ⭐ ${filme.notaPlataforma ? filme.notaPlataforma.toFixed(1) : 0} / 10</p>
                 ${diretorHtml}
-                <div class="acoes-card">
-                    <button class="btn-avaliar">Avaliar (Em breve)</button>
+                <div class="catalogo-acoes-card" style="margin-top: auto; padding: 15px;">
+                    <a href="#/detalhes/${filme.id}" class="catalogo-btn-avaliar" style="text-decoration: none; display: block; text-align: center; color: #000;">Ver Detalhes</a>
                 </div>
             </article>
         `;
@@ -166,8 +189,7 @@ function initCatalogo() {
 // REGISTRO DA PÁGINA NO FRAMEWORK
 // ==========================================
 
-App.createPage('/src/catalogo.html', initCatalogo);
-App.createPage('/src/catalogo', initCatalogo);
+App.createPage('#/catalogo', initCatalogo);
 
 // Compatibilidade para acesso direto
 if (window.location.pathname.includes('catalogo')) {

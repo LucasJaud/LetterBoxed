@@ -1,6 +1,31 @@
 import App from '../core/App.js';
 
-function initDetalhes() {
+export async function initDetalhes() {
+    // Carrega o CSS no head para garantir que aplique
+    const cssPath = './src/css/detalhes.css';
+    const jaExiste = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+        .some(l => l.getAttribute('href') === cssPath);
+    if (!jaExiste) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = cssPath;
+        document.head.appendChild(link);
+    }
+
+    // Renderiza a view
+    const { detalhesView } = await import('../views/detalhesView.js');
+    const appContent = document.querySelector('#app-content');
+    if (appContent) {
+        appContent.className = 'detalhes-page';
+        const hash = window.location.hash;
+        const filmeId = hash.split('/')[2];
+        appContent.innerHTML = detalhesView.template(filmeId);
+    }
+    const appHeader = document.querySelector('#app-header');
+    if (appHeader) {
+        appHeader.className = 'detalhes-header';
+    }
+
     const token = localStorage.getItem('token');
     if (!token) {
         alert('Acesso restrito. Faça login para continuar.');
@@ -18,12 +43,12 @@ function initDetalhes() {
         poster: 'https://via.placeholder.com/350x500'
     });
 
-    App.bindText('#detalhes-titulo', estado, 'titulo');
-    App.bindText('#detalhes-ano', estado, 'ano');
-    App.bindText('#detalhes-genero', estado, 'genero');
-    App.bindText('#detalhes-nota', estado, 'notaFormatada');
-    App.bindText('#detalhes-diretor', estado, 'diretor');
-    App.bindText('#detalhes-sinopse', estado, 'sinopse');
+    App.bindText('.detalhes-titulo', estado, 'titulo');
+    App.bindText('.detalhes-ano', estado, 'ano');
+    App.bindText('.detalhes-genero', estado, 'genero');
+    App.bindText('.detalhes-nota', estado, 'notaFormatada');
+    App.bindText('.detalhes-diretor', estado, 'diretor');
+    App.bindText('.detalhes-sinopse', estado, 'sinopse');
 
     App.onClick('a[href*="index.html"]', (e) => {
         e.preventDefault();
@@ -33,15 +58,15 @@ function initDetalhes() {
     });
 
     App.watch(() => {
-        const posterEl = document.getElementById('detalhes-poster');
+        const posterEl = document.querySelector('.detalhes-poster');
         if (posterEl) {
             posterEl.src = estado.poster;
         }
     });
 
     async function carregarDetalhesDoFilme() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const filmeId = urlParams.get('id');
+        const hash = window.location.hash;
+        const filmeId = hash.split('/')[2];
         if (!filmeId) return;
 
         try {
@@ -74,10 +99,4 @@ function initDetalhes() {
     carregarDetalhesDoFilme();
 }
 
-App.createPage('/src/detalhes.html', initDetalhes);
-App.createPage('/src/detalhes', initDetalhes);
-
-if (window.location.pathname.includes('detalhes')) {
-    App.createPage(window.location.pathname, initDetalhes);
-    App.start();
-}
+App.createPage('#/detalhes', initDetalhes);

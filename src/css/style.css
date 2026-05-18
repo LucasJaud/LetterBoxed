@@ -1,27 +1,26 @@
-/* CSS styles para o LetterBoxed */
-/* Bora Marcos! */
+/* CSS styles para o LetterBoxed - Login - classes únicas */
 
-/* 
-⚠️ SPA - IMPORTANTE:
-Este projeto é uma Single Page Application (SPA). Todo o CSS aqui será aplicado
-ao index.html. Os arquivos em src/pages/ são apenas REFERÊNCIA VISUAL e não são utilizados.
-Marcos: trabalhe com os seletores da renderização em JavaScript (views).
-*/
-
-* {
+/* Reset scoped */
+.login-page * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
+.login-page {
     font-family: Arial;
     background: url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4") no-repeat center center/cover;
     background-color: rgb(32, 37, 41);
-    color: #ffffff
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 80vh;
 }
 
-header {
+/* HEADER */
+.login-header {
     background-color: rgb(0, 0, 0);
     padding: 15px 30px;
     border-bottom: 2px solid #f5c518;
@@ -31,7 +30,7 @@ header {
     align-items: center;
 }
 
-header h1 {
+.login-header h1 {
     display: inline-block;
     background-color: #f5c518;
     color: #000;
@@ -41,21 +40,14 @@ header h1 {
     font-weight: bold;
 }
 
-header p {
+.login-header p {
     margin-top: 10px;
     font-size: 15px;
     color: #ccc;
 }
 
-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 80vh;
-}
-
-.container-login {
+/* CONTAINER LOGIN */
+.login-container {
     background-color: #1a1a1a;
     padding: 30px;
     width: 350px;
@@ -63,20 +55,18 @@ main {
     border: 3px solid #333;
 }
 
-.container-login h2 {
+.login-container h2 {
     margin-bottom: 20px;
     color: #f5c518;
 }
 
-.grupo-input {
+.login-grupo-input {
     position: relative;
     margin-bottom: 20px;
 }
 
-/*testando  o float input*/
-
 /* Input */
-.grupo-input input {
+.login-grupo-input input {
     width: 100%;
     padding: 12px 10px;
     border-radius: 4px;
@@ -88,7 +78,7 @@ main {
 }
 
 /* Label (posição inicial) */
-.grupo-input label {
+.login-grupo-input label {
     position: absolute;
     top: 50%;
     left: 10px;
@@ -102,29 +92,30 @@ main {
 }
 
 /* Quando o input está focado OU preenchido */
-.grupo-input input:focus+label,
-.grupo-input input:valid+label {
+.login-grupo-input input:focus + label,
+.login-grupo-input input:valid + label {
     top: -8px;
     font-size: 12px;
     color: #f5c518;
 }
 
 /* Efeito no input */
-.grupo-input input:focus {
+.login-grupo-input input:focus {
     border: 2px solid #f5c518;
 }
 
-#btn-entrar {
+.login-btn-entrar {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
     border-radius: 4px;
-    /*background-color: #6e6060;*/
+    background-color: #f5c518;
     color: #000;
     font-weight: bold;
     cursor: pointer;
+    border: none;
 }
 
-#btn-entrar:hover {
+.login-btn-entrar:hover {
     background-color: #ffd54f;
 }

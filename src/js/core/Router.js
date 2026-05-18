@@ -28,9 +28,9 @@ class Router {
      */
     init() {
         // Cacheia o HTML da página que já está na tela (para o botão "Voltar" funcionar)
-        const paginaAtual = window.location.pathname;
+        const paginaAtual = window.location.hash || '#/login';
         const mainAtual = document.querySelector(this.containerSelector);
-        if (mainAtual) {
+        if (mainAtual && paginaAtual.startsWith('#')) {
             this.cache[this._normalizarUrl(paginaAtual)] = {
                 main: mainAtual.innerHTML,
                 css: Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href)
@@ -44,9 +44,9 @@ class Router {
         document.addEventListener('submit', (evento) => this._interceptarForm(evento));
 
         // Intercepta o botão "Voltar" / "Avançar" do navegador
-        window.addEventListener('popstate', (evento) => {
-            const url = window.location.pathname;
-            this._carregarPagina(url, false); // false = não faz pushState de novo
+        window.addEventListener('hashchange', () => {
+            const url = window.location.hash || '#/login';
+            this._carregarPagina(url, false);
         });
 
         // Dispara os hooks da página inicial
@@ -160,6 +160,21 @@ class Router {
             let htmlMain;
             let cssLinks = [];
 
+            // Se for rota de hash, pula o fetch e dispara os hooks
+            if (url.startsWith('#')) {
+                console.log(`[Router] Rota de hash detectada: ${url}`);
+                
+                // Busca um hook que seja prefixo da rota atual (ex: '#/detalhes' atende '#/detalhes/1')
+                const matchingHook = Object.keys(this.hooks).find(h => url.startsWith(h));
+                
+                if (matchingHook) {
+                    this._dispararHooks(matchingHook);
+                } else {
+                    this._dispararHooks(url);
+                }
+                return;
+            }
+
             // Verifica se já temos no cache
             if (this.cache[chave]) {
                 htmlMain = this.cache[chave].main;
@@ -260,6 +275,11 @@ class Router {
      */
     _normalizarUrl(url) {
         try {
+            // Se for uma rota de hash, a chave deve ser a própria hash para não misturar com rotas de arquivo
+            if (url.startsWith('#')) {
+                return url;
+            }
+
             // Se já for uma URL completa, resolve. Se for relativa, resolve baseado no local atual.
             const urlResolvida = new URL(url, window.location.href);
             let limpa = urlResolvida.pathname;
