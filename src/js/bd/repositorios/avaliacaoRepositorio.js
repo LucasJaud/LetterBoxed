@@ -1,61 +1,72 @@
-// Importando o emulador de Local Storage para o Node.js
-import { LocalStorage } from 'node-localstorage';
-const localStorage = new LocalStorage('./scratch');
+import { Avaliacao as AvaliacaoModel, Usuario as UsuarioModel } from '../../models/index.js';
+import Avaliacao from '../../entidades/avaliacao.js';
 
 export class AvaliacaoRepositorio {
     async buscarPorId(id) {
-        const avaliacoesSalvas = localStorage.getItem('avaliacoes');
-        if (!avaliacoesSalvas) return null;
+        const data = await AvaliacaoModel.findByPk(id);
+        if (!data) return null;
 
-        const avaliacoes = JSON.parse(avaliacoesSalvas);
-        return avaliacoes.find(a => String(a.id) === String(id)) || null;
+        return new Avaliacao(
+            data.id,
+            data.filmeId,
+            data.usuarioId,
+            data.nota,
+            data.comentario
+        );
     }
 
     async buscarPorFilme(filmeId) {
-        const avaliacoesSalvas = localStorage.getItem('avaliacoes');
-        if (!avaliacoesSalvas) return [];
+        const data = await AvaliacaoModel.findAll({
+            where: { filmeId },
+            include: [{ model: UsuarioModel, as: 'usuario', attributes: ['id', 'nome'] }]
+        });
 
-        const avaliacoes = JSON.parse(avaliacoesSalvas);
-        return avaliacoes.filter(a => String(a.filmeId) === String(filmeId));
+        return data.map(a => ({
+            id: a.id,
+            filmeId: a.filmeId,
+            usuarioId: a.usuarioId,
+            nota: a.nota,
+            comentario: a.comentario,
+            usuarioNome: a.usuario ? a.usuario.nome : 'Anônimo'
+        }));
     }
 
-    async buscarPorUsuario(usuarioId) {
-        const avaliacoesSalvas = localStorage.getItem('avaliacoes');
-        if (!avaliacoesSalvas) return [];
+    async buscarPorFilmeEUsuario(filmeId, usuarioId) {
+        const data = await AvaliacaoModel.findOne({
+            where: { filmeId, usuarioId }
+        });
 
-        const avaliacoes = JSON.parse(avaliacoesSalvas);
-        return avaliacoes.filter(a => String(a.usuarioId) === String(usuarioId));
+        if (!data) return null;
+
+        return new Avaliacao(
+            data.id,
+            data.filmeId,
+            data.usuarioId,
+            data.nota,
+            data.comentario
+        );
     }
 
     async criar(avaliacao) {
-        const avaliacoesSalvas = localStorage.getItem('avaliacoes');
-        const avaliacoes = avaliacoesSalvas ? JSON.parse(avaliacoesSalvas) : [];
+        const data = await AvaliacaoModel.create({
+            filmeId: avaliacao.filmeId,
+            usuarioId: avaliacao.usuarioId,
+            nota: avaliacao.nota,
+            comentario: avaliacao.comentario
+        });
 
-        // Como criamos ela no Use Case com id 'null', o repositório assumirá
-        // o papel do banco Postgres aqui de fazer o "Auto-Increment" do Id.
-        if (!avaliacao.id) {
-            avaliacao.id = avaliacoes.length > 0 ? Math.max(...avaliacoes.map(a => a.id || 0)) + 1 : 1;
-        }
-
-        avaliacoes.push(avaliacao); 
-        localStorage.setItem('avaliacoes', JSON.stringify(avaliacoes));
+        avaliacao.id = data.id;
         return avaliacao;
     }
 
     async atualizar(avaliacao) {
-        const avaliacaoExiste = await this.buscarPorId(avaliacao.id);
+        await AvaliacaoModel.update({
+            nota: avaliacao.nota,
+            comentario: avaliacao.comentario
+        }, {
+            where: { id: avaliacao.id }
+        });
 
-        if (!avaliacaoExiste) {
-            throw new Error("Impossível atualizar. A avaliação não foi encontrada no banco local.");
-        }
-
-        const avaliacoesSalvas = localStorage.getItem('avaliacoes');
-        const avaliacoes = JSON.parse(avaliacoesSalvas);
-
-        const index = avaliacoes.findIndex(a => String(a.id) === String(avaliacao.id));
-        avaliacoes[index] = avaliacao;
-        
-        localStorage.setItem('avaliacoes', JSON.stringify(avaliacoes));
         return avaliacao;
     }
 }

@@ -1,7 +1,24 @@
 import { ListarFilmesUseCase } from '../useCases/ListarFilmesUseCase.js';
+import { DetalharFilmeUseCase } from '../useCases/DetalharFilmeUseCase.js';
 import { SeedService } from '../useCases/SeedService.js';
 
 export class FilmesController {
+    async detalhar(req, res) {
+        try {
+            const { id } = req.params;
+            const detalharFilmeUseCase = new DetalharFilmeUseCase();
+            const filme = await detalharFilmeUseCase.execute(id);
+
+            return res.status(200).json(filme);
+        } catch (error) {
+            if (error.message === "Filme não encontrado.") {
+                return res.status(404).json({ error: error.message });
+            }
+            console.error('Falha ao detalhar filme:', error);
+            return res.status(500).json({ error: 'Erro interno ao buscar detalhes do filme' });
+        }
+    }
+
     async listar(req, res) {
         try {
             const pagina = req.query.pagina || 1;

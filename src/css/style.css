@@ -1,5 +1,10 @@
 /* CSS styles para o LetterBoxed - Login - classes únicas */
 
+.global-body {
+    margin: 0;
+    padding: 0;
+}
+
 /* Reset scoped */
 .login-page * {
     margin: 0;
