@@ -1,9 +1,22 @@
-<header>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LetterBoxed - Detalhes do Filme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <link rel="stylesheet" href="../css/detalhes.css">
+    <header>
         <h1>LetterBoxed</h1>
         <nav>
             <a href="catalogo.html">Catálogo</a>
-            <a href="perfil.html">Meu Perfil</a>
-            <a href="../index.html">Sair</a>
+            <a href="#">Meu Perfil</a>
+            <a href="../../index.html">Sair</a>
         </nav>
     </header>
 
@@ -19,8 +32,10 @@
             <div class="informacoes-filme">
                 <p><strong>Ano:</strong> <span id="detalhes-ano">---</span></p>
                 <p><strong>Gênero:</strong> <span id="detalhes-genero">---</span></p>
-                <p><strong>Nota TMDB:</strong> <span id="detalhes-nota">---</span></p>
+                <p><strong>Nota TMDB:</strong> ⭐ <span id="detalhes-nota-externa">---</span> / 10</p>
+                <p><strong>Nota LetterBoxed:</strong> ⭐ <span id="detalhes-nota-interna">---</span> / 10</p>
                 <p><strong>Diretor:</strong> <span id="detalhes-diretor">---</span></p>
+                <p><strong>Roteiristas:</strong> <span id="detalhes-roteiristas">---</span></p>
             </div>
 
             <div class="descricao-filme">
@@ -31,32 +46,67 @@
             </div>
 
             <div class="avaliacao-usuario">
-                <h3>Sua Avaliação</h3>
-                <div class="estrelas">
-                    <span>⭐</span>
-                    <span>⭐</span>
-                    <span>⭐</span>
-                    <span>⭐</span>
-                    <span>⭐</span>
+                <div id="minha-avaliacao-exibicao" class="hidden">
+                    <div class="header-minha-aval">
+                        <h3>Sua Avaliação</h3>
+                        <button id="btn-editar-avaliacao" class="btn-icon">
+                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                        </button>
+                    </div>
+                    <div class="content-minha-aval">
+                        <div id="minha-nota-display" class="nota-exibicao"></div>
+                        <p id="meu-comentario-display"></p>
+                    </div>
                 </div>
-                <button class="btn-avaliar">Salvar Avaliação</button>
+
+                <div id="area-formulario-avaliacao">
+                    <h3>Sua Avaliação</h3>
+                    <div class="rating-premium" id="estrelas-container">
+                        <div class="stars-base">
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <div class="stars-gold" id="stars-fg">
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <div class="hit-areas">
+                        <div data-valor="1"></div><div data-valor="2"></div>
+                        <div data-valor="3"></div><div data-valor="4"></div>
+                        <div data-valor="5"></div><div data-valor="6"></div>
+                        <div data-valor="7"></div><div data-valor="8"></div>
+                        <div data-valor="9"></div><div data-valor="10"></div>
+                    </div>
+                </div>
+                <p id="label-nota">Toque nas estrelas para avaliar</p>
+                
+                <div class="textarea-container">
+                    <textarea id="comentario-texto" placeholder="Escreva sua opinião sobre o filme (opcional)..." maxlength="500"></textarea>
+                    <span id="char-count">0 / 500</span>
+                </div>
+                <div class="acoes-avaliacao">
+                        <button id="btn-salvar-avaliacao" class="btn-avaliar">Salvar Avaliação</button>
+                        <button id="btn-cancelar-edicao" class="btn-cancelar hidden">Cancelar</button>
+                        <span id="feedback-msg"></span>
+                    </div>
+                </div>
             </div>
-        </section>
     </main>
 
     <section class="comentarios-container">
-        <h3>Comentários</h3>
-        <textarea placeholder="Escreva seu comentário..."></textarea>
-        <button class="btn-comentar">Enviar Comentário</button>
-
-        <div class="lista-comentarios">
-            <article class="comentario">
-                <h4>Marcos</h4>
-                <p>Gostei muito do filme. Atmosfera incrível.</p>
-            </article>
+        <h3>Avaliações da Comunidade</h3>
+        <div class="lista-comentarios" id="lista-avaliacoes">
+            <!-- Populada via JS -->
+            <p class="msg-vazia">Nenhuma avaliação ainda. Seja o primeiro!</p>
         </div>
     </section>
 
-    <script src="./js/app/detalhes.js" type="module" defer></script>
+    <script src="../js/app/detalhes.js" type="module" defer></script>
 </body>
 </html>

@@ -44,25 +44,23 @@ export class FilmeRepositorio {
     }
 
     async atualizar(filme) {
-        const filmeExiste = await FilmeModel.findByPk(filme.id);
-        if (!filmeExiste) {
+        const filmeModel = await FilmeModel.findByPk(filme.id);
+        if (!filmeModel) {
             throw new Error("Impossível atualizar. O filme não foi encontrado no banco.");
         }
 
-        await FilmeModel.update({
-            titulo: filme.titulo,
-            ano: filme.ano,
-            genero: filme.genero,
-            sinopse: filme.sinopse,
-            diretor: filme.diretor,
-            nota: filme.nota,
-            notaPlataforma: filme.notaPlataforma,
-            poster: filme.poster,
-            roteiristas: filme.roteiristas
-        }, {
-            where: { id: filme.id }
-        });
+        // Atualiza os campos do modelo com os dados da entidade
+        filmeModel.titulo = filme.titulo;
+        filmeModel.ano = filme.ano;
+        filmeModel.genero = filme.genero;
+        filmeModel.sinopse = filme.sinopse;
+        filmeModel.diretor = filme.diretor;
+        filmeModel.nota = filme.nota;
+        filmeModel.notaPlataforma = filme.notaPlataforma;
+        filmeModel.poster = filme.poster;
+        filmeModel.roteiristas = filme.roteiristas;
 
+        await filmeModel.save();
         return filme;
     }
 
