@@ -31,6 +31,21 @@ export class AvaliacaoRepositorio {
         }));
     }
 
+    async buscarPorUsuario(usuarioId) {
+        const data = await AvaliacaoModel.findAll({
+            where: { usuarioId },
+            order: [['nota', 'DESC']]
+        });
+
+        return data.map(a => new Avaliacao(
+            a.id,
+            a.filmeId,
+            a.usuarioId,
+            a.nota,
+            a.comentario
+        ));
+    }
+
     async buscarPorFilmeEUsuario(filmeId, usuarioId) {
         const data = await AvaliacaoModel.findOne({
             where: { filmeId, usuarioId }

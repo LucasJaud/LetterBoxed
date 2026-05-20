@@ -66,6 +66,28 @@ export class FilmeRepositorio {
         return filme;
     }
 
+    async buscarPorIds(ids) {
+        if (!ids || ids.length === 0) return [];
+
+        const filmesData = await FilmeModel.findAll({
+            where: { id: { [Op.in]: ids } }
+        });
+
+        return filmesData.map(filmeData => new Filme(
+            filmeData.id,
+            filmeData.titulo,
+            filmeData.ano,
+            filmeData.genero,
+            filmeData.sinopse,
+            filmeData.diretor,
+            filmeData.nota,
+            [],
+            filmeData.notaPlataforma,
+            filmeData.poster,
+            filmeData.roteiristas
+        ));
+    }
+
     async listar({ pagina = 1, limite = 20, genero = '', ano = '', diretor = '', roteirista = '', titulo = '' }) {
         const offset = (pagina - 1) * limite;
         const where = {};

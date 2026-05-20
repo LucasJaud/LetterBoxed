@@ -3,7 +3,6 @@
 import { loginView } from './views/loginView.js';
 import { registroView } from './views/registroView.js';
 import { catalogoView } from './views/catalogoView.js';
-import { perfilView } from './views/perfilView.js';
 import { detalhesView } from './views/detalhesView.js';
 
 class SPA {
@@ -12,7 +11,6 @@ class SPA {
             '#/login': { view: loginView, title: 'Login' },
             '#/registro': { view: registroView, title: 'Registro' },
             '#/catalogo': { view: catalogoView, title: 'Catálogo' },
-            '#/perfil': { view: perfilView, title: 'Perfil' },
             '#/detalhes/:id': { view: detalhesView, title: 'Detalhes' }
         };
         this.currentView = null;

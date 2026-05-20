@@ -1,68 +1,46 @@
-import { LocalStorage } from 'node-localstorage';
-const localStorage = new LocalStorage('./scratch');
+import { Usuario as UsuarioModel } from '../../models/index.js';
 
 export class UsuarioRepositorio {
-    _garantirAdmin() {
-        const usuariosSalvos = localStorage.getItem('usuarios');
-        if (!usuariosSalvos) {
-            const admin = [{ id: 1, nome: 'Administrador', email: 'admin@admin.com', senha: 'admin123' }];
-            localStorage.setItem('usuarios', JSON.stringify(admin));
-        }
-    }
-
     async buscarPorId(id) {
-        this._garantirAdmin();
-        const usuariosSalvos = localStorage.getItem('usuarios');
-        if (!usuariosSalvos) return null;
-
-        const usuarios = JSON.parse(usuariosSalvos);
-        return usuarios.find(u => String(u.id) === String(id)) || null;
+        return await UsuarioModel.findByPk(id);
     }
 
-    // Função de checagem super popular e útil em entidades de usuário (ex: Login, Duplicidade de Cadastro)
     async buscarPorEmail(email) {
-        this._garantirAdmin();
-        const usuariosSalvos = localStorage.getItem('usuarios');
-        if (!usuariosSalvos) return null;
-
-        const usuarios = JSON.parse(usuariosSalvos);
-        return usuarios.find(u => u.email === email) || null;
+        return await UsuarioModel.findOne({ where: { email } });
     }
 
     async criar(usuario) {
-        const usuariosSalvos = localStorage.getItem('usuarios');
-        const usuarios = usuariosSalvos ? JSON.parse(usuariosSalvos) : [];
-
-        // Checar conflitos de identidade para não registrar usuários duplicados
         const usuarioExistente = await this.buscarPorEmail(usuario.email);
         if (usuarioExistente) {
             throw new Error("Impossível criar. O e-mail do usuário já existe no banco de dados.");
         }
 
-        // Auto-incremento de chaves primárias local do banco sintético
-        if (!usuario.id) {
-            usuario.id = usuarios.length > 0 ? Math.max(...usuarios.map(u => u.id || 0)) + 1 : 1;
-        }
+        const criado = await UsuarioModel.create({
+            nome: usuario.nome,
+            email: usuario.email,
+            senha: usuario.senha
+        });
 
-        usuarios.push(usuario);
-        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+        usuario.id = criado.id;
+        usuario.dataCadastro = criado.createdAt;
         return usuario;
     }
 
     async atualizar(usuario) {
-        const usuarioExiste = await this.buscarPorId(usuario.id);
+        const usuarioExiste = await UsuarioModel.findByPk(usuario.id);
 
         if (!usuarioExiste) {
             throw new Error("Impossível atualizar. O usuário não foi encontrado no banco.");
         }
 
-        const usuariosSalvos = localStorage.getItem('usuarios');
-        const usuarios = JSON.parse(usuariosSalvos);
+        await UsuarioModel.update({
+            nome: usuario.nome,
+            email: usuario.email,
+            senha: usuario.senha
+        }, {
+            where: { id: usuario.id }
+        });
 
-        const index = usuarios.findIndex(u => String(u.id) === String(usuario.id));
-        usuarios[index] = usuario;
-
-        localStorage.setItem('usuarios', JSON.stringify(usuarios));
         return usuario;
     }
 }

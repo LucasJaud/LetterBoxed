@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { UsuarioRepositorio } from '../../bd/repositorios/usuarioRepositorio.js';
 import { LoginUseCase } from '../useCases/LoginUseCase.js';
 import { RegistrarUsuarioUseCase } from '../useCases/RegistrarUsuarioUseCase.js';
-
+import { ObterPerfilUsuarioUseCase } from '../useCases/ObterPerfilUsuarioUseCase.js';
 export class UsuariosController {
     
     // Método correspondente a rota POST para entrar na conta (Login)
@@ -11,7 +11,7 @@ export class UsuariosController {
             // O express extrai magicamente o e-mail e a senha do pacote de rede enviado pelo frontend
             const { email, senha } = req.body;
 
-            // Instancia a dependência do banco local (que irá procurar o usuário no arquivo JSON)
+            // Instancia o repositório de usuários (PostgreSQL via Sequelize)
             const usuarioRepositorio = new UsuarioRepositorio();
             
             // Instancia o super-cérebro das nossas regras, entregando a ele o nosso repositório
@@ -34,8 +34,7 @@ export class UsuariosController {
             });
 
         } catch (error) {
-            // Qualquer bloqueio do UseCase de "E-mail obrigatório" ou "Senha Incorreta" cai aqui no Catch.
-            // Erro HTTP 401: Unauthorized (Você não está autorizado a entrar, ou erro de credenciais HTTP 400).
+            // Erros de validação ou credenciais inválidas retornam HTTP 401
             console.error("Tentativa de Login falhou:", error.message);
             return res.status(401).json({ erro: error.message });
         }
@@ -63,6 +62,24 @@ export class UsuariosController {
                 erro: error.message,
                 message: error.message // Ambos os formatos para compatibilidade com o frontend
             });
+        }
+    }
+
+    async obterPerfil(req, res) {
+        try {
+            const usuarioId = req.usuario.id;
+            const obterPerfilUseCase = new ObterPerfilUsuarioUseCase();
+            const perfil = await obterPerfilUseCase.execute(usuarioId);
+
+            return res.status(200).json(perfil);
+        } catch (error) {
+            console.error("Erro ao obter perfil:", error.message);
+
+            if (error.message === "Usuário não encontrado.") {
+                return res.status(404).json({ erro: error.message });
+            }
+
+            return res.status(500).json({ erro: "Erro ao buscar perfil do usuário." });
         }
     }
 }

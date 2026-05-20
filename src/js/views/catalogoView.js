@@ -34,6 +34,7 @@ export const catalogoView = {
             </select>
 
             <button class="catalogo-btn-buscar">Buscar</button>
+            <a href="#/perfil" class="catalogo-btn-buscar">Meu Perfil</a>
         </section>
 
         <section class="catalogo-grid-filmes">
