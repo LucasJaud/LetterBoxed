@@ -15,7 +15,7 @@ export const loginView = {
                 </div>
                 <button type="submit" class="login-btn-entrar">Entrar</button>
             </form>
-            <p>Não tem conta? <a href="#/registro">Cadastre-se</a></p>
+            <p>Não tem conta? <a href="#/registro" class="login-link-registro">Criar Conta</a></p>
         </section>
     `,
 

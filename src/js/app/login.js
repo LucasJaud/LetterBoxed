@@ -72,8 +72,28 @@
         });
     }
 
+    async function initRegistro() {
+        // Carrega a view de registro
+        const { registroView } = await import('../views/registroView.js');
+        const appContent = document.querySelector('#app-content');
+        if (appContent) {
+            appContent.className = 'login-page'; // Reutiliza estilo de centralização e background
+            appContent.innerHTML = registroView.template();
+        }
+        const appHeader = document.querySelector('#app-header');
+        if (appHeader) {
+            appHeader.className = 'login-header';
+        }
+
+        // Inicializa as interações da view de registro (submit, validações, etc.)
+        await registroView.init(App);
+    }
+
     // Registra a página de login no framework
     App.createPage('#/login', initLogin);
+
+    // Registra a página de registro no framework
+    App.createPage('#/registro', initRegistro);
 
     // Redireciona para o login se estiver na raiz
     if (!window.location.hash || window.location.hash === '#') {

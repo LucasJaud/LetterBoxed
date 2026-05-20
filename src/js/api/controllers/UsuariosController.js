@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { UsuarioRepositorio } from '../../bd/repositorios/usuarioRepositorio.js';
 import { LoginUseCase } from '../useCases/LoginUseCase.js';
+import { RegistrarUsuarioUseCase } from '../useCases/RegistrarUsuarioUseCase.js';
 
 export class UsuariosController {
     
@@ -37,6 +38,31 @@ export class UsuariosController {
             // Erro HTTP 401: Unauthorized (Você não está autorizado a entrar, ou erro de credenciais HTTP 400).
             console.error("Tentativa de Login falhou:", error.message);
             return res.status(401).json({ erro: error.message });
+        }
+    }
+
+    // Método correspondente a rota POST para criar nova conta (Registro)
+    async registrar(req, res) {
+        try {
+            const { nome, email, senha } = req.body;
+
+            const usuarioRepositorio = new UsuarioRepositorio();
+            const registrarUsuarioUseCase = new RegistrarUsuarioUseCase(usuarioRepositorio);
+
+            const resultado = await registrarUsuarioUseCase.execute({ nome, email, senha });
+
+            // Retorna o status HTTP 201 (Created) em caso de sucesso
+            return res.status(201).json({
+                mensagem: "Usuário registrado com sucesso!",
+                dados: resultado
+            });
+        } catch (error) {
+            console.error("Tentativa de Registro falhou:", error.message);
+            // Retorna status 400 (Bad Request) para erros de validação ou e-mail duplicado
+            return res.status(400).json({
+                erro: error.message,
+                message: error.message // Ambos os formatos para compatibilidade com o frontend
+            });
         }
     }
 }
