@@ -1,16 +1,5 @@
 import App from '../core/App.js';
-
-function configurarNav() {
-    const nav = document.querySelector('#app-nav');
-    if (!nav) return;
-
-    nav.classList.remove('nav-hidden');
-    nav.innerHTML = `
-        <a href="#/catalogo">Catálogo</a>
-        <a href="#/perfil" class="active">Meu Perfil</a>
-        <a href="#/logout">Sair</a>
-    `;
-}
+import { configurarNav } from './nav.js';
 
 export async function initPerfil() {
     const { perfilView } = await import('../views/perfilView.js');
@@ -19,12 +8,7 @@ export async function initPerfil() {
         appContent.className = 'perfil-page';
         appContent.innerHTML = perfilView.template();
     }
-    const appHeader = document.querySelector('#app-header');
-    if (appHeader) {
-        appHeader.className = 'catalogo-header';
-    }
-
-    configurarNav();
+    configurarNav('perfil');
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -48,15 +32,6 @@ export async function initPerfil() {
     App.bindText('.perfil-media-avaliacao', estado, 'mediaNota');
 
     App.bindList('.perfil-grid-filmes', estado, 'filmes', renderizarCard);
-
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('a[href="#/logout"]')) {
-            e.preventDefault();
-            localStorage.removeItem('token');
-            localStorage.removeItem('usuario');
-            window.location.href = '/';
-        }
-    });
 
     async function carregarPerfil() {
         try {

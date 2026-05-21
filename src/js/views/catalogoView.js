@@ -33,8 +33,7 @@ export const catalogoView = {
                 <option value="2020">2020</option>
             </select>
 
-            <button class="catalogo-btn-buscar">Buscar</button>
-            <a href="#/perfil" class="catalogo-btn-buscar">Meu Perfil</a>
+            <button type="button" class="catalogo-btn-buscar">Buscar</button>
         </section>
 
         <section class="catalogo-grid-filmes">

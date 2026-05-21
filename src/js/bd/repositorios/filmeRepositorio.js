@@ -93,7 +93,7 @@ export class FilmeRepositorio {
         const where = {};
 
         if (genero) {
-            where.genero = { [Op.like]: `%${genero}%` };
+            where.genero = { [Op.iLike]: `%${genero}%` };
         }
         if (ano) {
             where.ano = ano;
@@ -105,7 +105,7 @@ export class FilmeRepositorio {
             where.roteiristas = { [Op.like]: `%${roteirista}%` };
         }
         if (titulo) {
-            where.titulo = { [Op.iLike || Op.like]: `%${titulo}%` };
+            where.titulo = { [Op.iLike]: `%${titulo}%` };
         }
 
         const { rows, count } = await FilmeModel.findAndCountAll({

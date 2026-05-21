@@ -47,6 +47,15 @@
     color: #f5c518;
 }
 
+.catalogo-header > p {
+    display: none;
+}
+
+.catalogo-header nav a.active {
+    color: #f5c518;
+    font-weight: bold;
+}
+
 /* Painel de filtros */
 .catalogo-painel-filtros {
     background-color: #1a1a1a;
@@ -96,6 +105,24 @@
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)) !important;
     gap: 25px !important;
+    transition: opacity 0.15s ease;
+}
+
+.catalogo-grid-filmes.catalogo-carregando {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.catalogo-msg-vazia,
+.catalogo-msg-erro {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: #aaa;
+}
+
+.catalogo-msg-erro {
+    color: #f66;
 }
 
 /* Card */

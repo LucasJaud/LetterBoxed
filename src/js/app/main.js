@@ -4,6 +4,7 @@
 // ==========================================
 
 import App from '../core/App.js';
+import { configurarNav } from './nav.js';
 
 // ==========================================
 // LÓGICA DA PÁGINA DO CATÁLOGO
@@ -28,10 +29,7 @@ export async function initCatalogo() {
         appContent.className = 'catalogo-page';
         appContent.innerHTML = catalogoView.template();
     }
-    const appHeader = document.querySelector('#app-header');
-    if (appHeader) {
-        appHeader.className = 'catalogo-header';
-    }
+    configurarNav('catalogo');
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -42,6 +40,14 @@ export async function initCatalogo() {
 
     let paginaAtual = 1;
     let totalPaginas = 1;
+    let debounceTimer = null;
+    let abortController = null;
+    const DEBOUNCE_MS = 250;
+
+    const gridContainer = document.querySelector('.catalogo-grid-filmes');
+    const inputBusca = document.querySelector('.catalogo-busca-filme');
+    const selectGenero = document.querySelector('.catalogo-filtro-genero');
+    const selectAno = document.querySelector('.catalogo-filtro-ano');
 
     // ==========================================
     // ESTADO REATIVO
@@ -49,32 +55,87 @@ export async function initCatalogo() {
 
     const estado = App.state({
         filmes: [],
+        titulo: '',
+        genero: '',
+        ano: '',
         carregando: false,
         erro: null
     });
 
     // ==========================================
-    // BINDINGS (conecta o HTML ao estado)
+    // RENDER DO GRID
     // ==========================================
 
-    App.bindList('.catalogo-grid-filmes', estado, 'filmes', renderizarCard);
+    let ultimosIdsFilmes = '';
+
+    function atualizarIndicadorCarregando() {
+        gridContainer?.classList.toggle('catalogo-carregando', estado.carregando);
+    }
+
+    function atualizarGrid() {
+        if (!gridContainer) return;
+
+        const lista = estado.filmes;
+        if (!lista?.length) {
+            if (!estado.carregando) {
+                gridContainer.innerHTML = '<p class="catalogo-msg-vazia">Nenhum filme encontrado.</p>';
+                ultimosIdsFilmes = '';
+            }
+            return;
+        }
+
+        const ids = lista.map(f => f.id).join(',');
+        if (ids === ultimosIdsFilmes) return;
+
+        ultimosIdsFilmes = ids;
+        gridContainer.innerHTML = lista.map(renderizarCard).join('');
+    }
+
+    App.watch(() => {
+        estado.carregando;
+        atualizarIndicadorCarregando();
+    });
+
+    App.watch(() => {
+        estado.filmes;
+        atualizarGrid();
+    });
 
     // ==========================================
     // EVENTOS
     // ==========================================
 
-    App.onClick('a[href*="index.html"]', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('token');
-        localStorage.removeItem('usuario');
-        window.location.href = '/';
-    });
-
-    App.onClick('.catalogo-btn-buscar', (e) => {
-        e.preventDefault();
-        console.log('[main.js] Botão de buscar clicado!');
+    function executarBusca() {
+        if (debounceTimer) {
+            clearTimeout(debounceTimer);
+            debounceTimer = null;
+        }
         paginaAtual = 1;
         buscarFilmes(paginaAtual);
+    }
+
+    function agendarBuscaTitulo() {
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(executarBusca, DEBOUNCE_MS);
+    }
+
+    inputBusca?.addEventListener('input', () => {
+        estado.titulo = inputBusca.value;
+        agendarBuscaTitulo();
+    });
+
+    selectGenero?.addEventListener('change', () => {
+        estado.genero = selectGenero.value;
+        executarBusca();
+    });
+
+    selectAno?.addEventListener('change', () => {
+        estado.ano = selectAno.value;
+        executarBusca();
+    });
+
+    App.onClick('button.catalogo-btn-buscar', () => {
+        executarBusca();
     });
 
     App.onClick('.catalogo-btn-ant', (e) => {
@@ -98,22 +159,23 @@ export async function initCatalogo() {
     // ==========================================
 
     async function buscarFilmes(pagina = 1) {
+        if (abortController) {
+            abortController.abort();
+        }
+        abortController = new AbortController();
+
         try {
-            const container = document.querySelector('.catalogo-grid-filmes');
-            if (container) {
-                container.innerHTML = '<p>Carregando filmes...</p>';
-            }
+            estado.carregando = true;
 
-            const titulo = document.querySelector('.catalogo-busca-filme')?.value || '';
-            const genero = document.querySelector('.catalogo-filtro-genero')?.value || '';
-            const ano = document.querySelector('.catalogo-filtro-ano')?.value || '';
-
-            console.log(`[main.js] Buscando - Página: ${pagina}, Título: "${titulo}", Gênero: "${genero}", Ano: "${ano}"`);
+            const titulo = estado.titulo.trim();
+            const genero = estado.genero;
+            const ano = estado.ano;
 
             const params = new URLSearchParams({ pagina, genero, ano, titulo }).toString();
             const url = `http://localhost:3000/filmes?${params}`;
 
             const response = await fetch(url, {
+                signal: abortController.signal,
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -143,11 +205,13 @@ export async function initCatalogo() {
             }
 
         } catch (error) {
+            if (error.name === 'AbortError') return;
             console.error('[main.js] Erro de requisição:', error);
-            const container = document.querySelector('.catalogo-grid-filmes');
-            if (container) {
-                container.innerHTML = '<p style="color: red;">Erro ao buscar filmes. Verifique o console do navegador.</p>';
+            if (gridContainer) {
+                gridContainer.innerHTML = '<p class="catalogo-msg-erro">Erro ao buscar filmes. Tente novamente.</p>';
             }
+        } finally {
+            estado.carregando = false;
         }
     }
 
@@ -157,7 +221,7 @@ export async function initCatalogo() {
 
     function renderizarCard(filme) {
         const posterHtm = filme.poster
-            ? `<img src="${filme.poster}" alt="Pôster de ${filme.titulo}" class="catalogo-poster-filme">`
+            ? `<img src="${filme.poster}" alt="Pôster de ${filme.titulo}" class="catalogo-poster-filme" loading="lazy" decoding="async">`
             : `<div class="catalogo-poster-vazio">Sem Pôster</div>`;
 
         const diretorHtml = filme.diretor
