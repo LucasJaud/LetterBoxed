@@ -1,7 +1,19 @@
 import App from '../core/App.js';
 import { configurarNav } from './nav.js';
+import { API_BASE_URL } from '../core/config.js';
 
 export async function initPerfil() {
+    // Carrega o CSS no head para garantir que aplique
+    const cssPath = './src/css/perfil.css';
+    const jaExiste = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+        .some(l => l.getAttribute('href') === cssPath);
+    if (!jaExiste) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = cssPath;
+        document.head.appendChild(link);
+    }
+
     const { perfilView } = await import('../views/perfilView.js');
     const appContent = document.querySelector('#app-content');
     if (appContent) {
@@ -35,7 +47,7 @@ export async function initPerfil() {
 
     async function carregarPerfil() {
         try {
-            const response = await fetch('http://localhost:3000/usuarios/perfil', {
+            const response = await fetch(`${API_BASE_URL}/usuarios/perfil`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 

@@ -27,7 +27,10 @@ export const perfilView = {
         </section>
     `,
 
-    init: async () => {},
+    init: async (app) => {
+        const { initPerfil } = await import('../app/perfil.js');
+        initPerfil();
+    },
 
     destroy: () => {}
 };

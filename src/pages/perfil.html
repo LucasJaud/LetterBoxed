@@ -1,36 +1,65 @@
-<header class="header-perfil">
-    <div class="perfil-usuario">
-        <img id="foto-perfil" src="https://via.placeholder.com/150" alt="Foto do Perfil" class="foto-usuario">
-        <div class="info-usuario">
-            <h1 id="nome-usuario">João Silva</h1>
-            <p id="email-usuario">joao@example.com</p>
-        </div>
-    </div>
-    <nav class="nav-perfil">
-        <a href="catalogo.html">← Voltar ao Catálogo</a>
-        <a href="../index.html">Sair</a>
-    </nav>
-</header>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LetterBoxed - Perfil do Usuário</title>
+    <link rel="stylesheet" href="../css/catalogo.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+</head>
+<body class="perfil-page">
+    <header class="catalogo-header">
+        <h1>LetterBoxed</h1>
+        <nav class="nav-perfil">
+            <a href="catalogo.html">Catálogo</a>
+            <a href="perfil.html" class="active">Meu Perfil</a>
+            <a href="../index.html">Sair</a>
+        </nav>
+    </header>
 
-<main class="container-perfil">
-    <section class="stats-usuario">
-        <div class="stat-item">
-            <span class="stat-numero" id="total-filmes">24</span>
-            <span class="stat-label">Filmes Assistidos</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-numero" id="media-avaliacao">8.2</span>
-            <span class="stat-label">Nota Média</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-numero" id="total-avaliacoes">18</span>
-            <span class="stat-label">Avaliações Deixadas</span>
-        </div>
-    </section>
+    <main class="container-perfil">
+        <section class="info-usuario">
+            <img class="perfil-foto-usuario" src="https://via.placeholder.com/100" alt="Foto do Perfil">
+            <div>
+                <h2 class="perfil-nome-usuario">João Silva</h2>
+                <p class="perfil-email-usuario">joao@example.com</p>
+            </div>
+        </section>
 
-    <section class="filmes-usuario">
-        <h2>Meus Filmes Favoritos</h2>
-        <!-- A equipe de JS injetará os cards dos filmes aqui via id="user-movies-grid" -->
-        <div id="user-movies-grid"></div>
-    </section>
-</main>
+        <section class="stats-usuario">
+            <div class="stat-item">
+                <span class="stat-numero perfil-total-filmes">24</span>
+                <span class="stat-label">Filmes Assistidos</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-numero perfil-media-avaliacao">8.2</span>
+                <span class="stat-label">Nota Média</span>
+            </div>
+        </section>
+
+        <section class="filmes-usuario">
+            <h2>Filmes Avaliados</h2>
+            <div class="perfil-grid-filmes">
+                <!-- Exemplo de card de filme para referência visual -->
+                <article class="catalogo-card-filme">
+                    <a href="detalhes.html" style="text-decoration: none; color: inherit;">
+                        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400" alt="Pôster do Filme" class="catalogo-poster-filme">
+                        <h3>O Poderoso Chefão (1972)</h3>
+                    </a>
+                    <p><strong>Gênero:</strong> Crime, Drama</p>
+                    <p><strong>Sua nota:</strong> ⭐ 10.0 / 10</p>
+                </article>
+
+                <article class="catalogo-card-filme">
+                    <a href="detalhes.html" style="text-decoration: none; color: inherit;">
+                        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400" alt="Pôster do Filme" class="catalogo-poster-filme">
+                        <h3>Interestelar (2014)</h3>
+                    </a>
+                    <p><strong>Gênero:</strong> Ficção Científica, Drama</p>
+                    <p><strong>Sua nota:</strong> ⭐ 9.0 / 10</p>
+                </article>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

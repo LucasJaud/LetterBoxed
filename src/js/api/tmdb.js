@@ -52,7 +52,7 @@ class Tmdb {
     static async buscarFilmesPorId(id) {
         try {
             // Adicional appending: credits traz todas as informações de elenco (cast) e equipe técnica (crew) do filme
-            const endpoint = `/movie/${id}?language=pt-BR&append_to_response=credits`;
+            const endpoint = `/movie/${id}?language=pt-BR&append_to_response=credits,keywords`;
             const response = await fetch(`${this.baseUrl}${endpoint}`, this.options);
             const data = await response.json();
             return data;

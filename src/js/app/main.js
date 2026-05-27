@@ -5,6 +5,7 @@
 
 import App from '../core/App.js';
 import { configurarNav } from './nav.js';
+import { API_BASE_URL } from '../core/config.js';
 
 // ==========================================
 // LÓGICA DA PÁGINA DO CATÁLOGO
@@ -172,7 +173,7 @@ export async function initCatalogo() {
             const ano = estado.ano;
 
             const params = new URLSearchParams({ pagina, genero, ano, titulo }).toString();
-            const url = `http://localhost:3000/filmes?${params}`;
+            const url = `${API_BASE_URL}/filmes?${params}`;
 
             const response = await fetch(url, {
                 signal: abortController.signal,

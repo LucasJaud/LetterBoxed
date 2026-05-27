@@ -1,0 +1,58 @@
+# render.yaml - Render Blueprint Spec
+# Permite fazer o deploy completo da aplicação (Banco de Dados, Backend API e Frontend) com um único clique.
+# Para subir no Render, basta conectar seu repositório no dashboard do Render, e ele detectará este arquivo automaticamente.
+
+services:
+  # 1. Banco de Dados PostgreSQL (Relacional)
+  - type: database
+    name: letterboxed-db
+    databaseName: filmes_bd
+    user: postgres
+    plan: free
+
+  # 2. Servidor Backend Node.js / Express
+  - type: web
+    name: letterboxed-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm run migration:run && npm run seed:tmdb && npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        generateValue: true # Render gera automaticamente uma chave JWT segura de 256-bits em produção
+      - key: TMDB_API
+        value: 0a1c23faaeef3024bfcfb6645da44c22
+      - key: TMDB_TOKEN
+        value: eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYTFjMjNmYWFlZWYzMDI0YmZjZmI2NjQ1ZGE0NGMyMiIsIm5iZiI6MTY1NzY0ODQ3MC45NzMsInN1YiI6IjYyY2RiNTU2OTU2NjU4MjYxNDNiMTM3OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.FFe6zxB--3Y6SQl2JPyGHl2VrzmduGMWgR9eo0zbAMY
+      
+      # Vinculação automática com as credenciais do banco provido acima:
+      - key: DB_HOST
+        fromDatabase:
+          name: letterboxed-db
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: letterboxed-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: letterboxed-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: letterboxed-db
+          property: database
+      - key: DB_PORT
+        value: 5432
+
+  # 3. Servidor Frontend Estático (Páginas HTML, CSS e JavaScript SPA)
+  - type: web
+    name: letterboxed-web
+    env: static
+    plan: free
+    buildCommand: "" # Site estático nativo (sem compilação necessária)
+    publishDir: "."  # Servido diretamente da raiz do projeto (onde está o index.html)

@@ -34,8 +34,35 @@ export class SeedService {
                 await delay(1000); // 1 segundo de intervalo entre os lotes
             }
 
+            // Filtrar filmes com palavras-chave proibidas (sexy, erotic, porn, softcore, hardcore, sensual, nude, etc.)
+            const filmesFiltrados = filmesDetalhes.filter(detalhe => {
+                if (!detalhe || !detalhe.keywords || !detalhe.keywords.keywords) {
+                    return true;
+                }
+
+                const palavrasChaveProibidas = [
+                    'sexy', 'erotic', 'erotica', 'erotism', 'porn', 'softcore', 'hardcore', 
+                    'sensual', 'nude', 'nudity', 'striptease', 'adult movie', 'sex', 'sexuality'
+                ];
+
+                const keywords = detalhe.keywords.keywords.map(k => k.name.toLowerCase());
+
+                const contemProibido = keywords.some(keyword => 
+                    palavrasChaveProibidas.some(proibida => 
+                        keyword.includes(proibida)
+                    )
+                );
+
+                if (contemProibido) {
+                    console.log(`[SeedService] 🚫 Filme barrado por conter conteúdo adulto/sensual: "${detalhe.title}"`);
+                    return false;
+                }
+
+                return true;
+            });
+
             // Transformar na entidade de domínio
-            const entidades = filmesDetalhes.map(detalhe => {
+            const entidades = filmesFiltrados.map(detalhe => {
                 const anoLancamento = detalhe.release_date ? detalhe.release_date.substring(0, 4) : 'N/A';
                 const posterPatch = detalhe.poster_path ? `https://image.tmdb.org/t/p/w500${detalhe.poster_path}` : null;
                 const generosTexto = detalhe.genres ? detalhe.genres.map(g => g.name).join(', ') : '';

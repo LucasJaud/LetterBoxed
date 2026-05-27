@@ -1,0 +1,163 @@
+/* CSS styles para o LetterBoxed - Perfil - classes únicas */
+
+/* Reset scoped */
+.perfil-page * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.perfil-page {
+    font-family: Arial, sans-serif;
+    background-color: rgb(32, 37, 41);
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 40px;
+}
+
+/* CONTAINER PRINCIPAL */
+.container-perfil {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* CARTÃO DE INFO DO USUÁRIO */
+.info-usuario {
+    background-color: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 16px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    transition: all 0.3s ease;
+}
+
+.info-usuario:hover {
+    border-color: #f5c518;
+    box-shadow: 0 10px 25px rgba(245, 197, 24, 0.08);
+}
+
+.perfil-foto-usuario {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #f5c518;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(245, 197, 24, 0.2);
+    background-color: #222;
+}
+
+.info-usuario div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.perfil-nome-usuario {
+    font-size: 28px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.perfil-email-usuario {
+    font-size: 16px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+/* SEÇÃO DE ESTATÍSTICAS */
+.stats-usuario {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    flex: 1;
+    min-width: 180px;
+    background-color: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    border-color: #f5c518;
+    box-shadow: 0 8px 20px rgba(245, 197, 24, 0.12);
+}
+
+.stat-numero {
+    font-size: 38px;
+    font-weight: 800;
+    color: #f5c518;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(245, 197, 24, 0.15);
+}
+
+.stat-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* SEÇÃO DE FILMES AVALIADOS */
+.filmes-usuario {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.filmes-usuario h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    border-left: 4px solid #f5c518;
+    padding-left: 14px;
+    letter-spacing: -0.5px;
+}
+
+/* GRID DE FILMES NO PERFIL */
+.perfil-grid-filmes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 600px) {
+    .perfil-page {
+        padding: 20px;
+    }
+    
+    .info-usuario {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px 20px;
+        gap: 15px;
+    }
+    
+    .perfil-nome-usuario {
+        font-size: 24px;
+    }
+    
+    .stats-usuario {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-item {
+        min-width: 100%;
+    }
+}

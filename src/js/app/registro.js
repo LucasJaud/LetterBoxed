@@ -1,4 +1,5 @@
 import App from '../core/App.js';
+import { API_BASE_URL } from '../core/config.js';
 
 export async function initRegistro() {
     const { registroView } = await import('../views/registroView.js');
@@ -38,7 +39,7 @@ export async function initRegistro() {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/usuarios/registrar', {
+            const response = await fetch(`${API_BASE_URL}/usuarios/registrar`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome, email, senha })

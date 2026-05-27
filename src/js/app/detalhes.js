@@ -1,4 +1,5 @@
 import App from '../core/App.js';
+import { API_BASE_URL } from '../core/config.js';
 
 export async function initDetalhes() {
     // Carrega o CSS no head para garantir que aplique
@@ -163,7 +164,7 @@ export async function initDetalhes() {
         if (!filmeId) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/filmes/${filmeId}`, {
+            const response = await fetch(`${API_BASE_URL}/filmes/${filmeId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
@@ -194,7 +195,7 @@ export async function initDetalhes() {
 
     async function carregarAvaliacoes(filmeId) {
         try {
-            const response = await fetch(`http://localhost:3000/avaliacoes/${filmeId}`, {
+            const response = await fetch(`${API_BASE_URL}/avaliacoes/${filmeId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
@@ -237,7 +238,7 @@ export async function initDetalhes() {
 
     async function buscarMinhaAvaliacao(filmeId) {
         try {
-            const response = await fetch(`http://localhost:3000/avaliacoes/${filmeId}/minha`, {
+            const response = await fetch(`${API_BASE_URL}/avaliacoes/${filmeId}/minha`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
@@ -272,7 +273,7 @@ export async function initDetalhes() {
         }
 
         try {
-            const response = await fetch(`http://localhost:3000/avaliacoes/${filmeId}`, {
+            const response = await fetch(`${API_BASE_URL}/avaliacoes/${filmeId}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

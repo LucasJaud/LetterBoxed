@@ -13,6 +13,7 @@
 (async function bootstrap() {
     // Carrega o mini framework dinamicamente (necessário pois o HTML não tem type="module")
     const { default: App } = await import('../core/App.js');
+    const { API_BASE_URL } = await import('../core/config.js');
 
     // ==========================================
     // PÁGINA DE LOGIN (index.html)
@@ -51,7 +52,7 @@
             }
 
             try {
-                const response = await fetch('http://localhost:3000/usuarios/login', {
+                const response = await fetch(`${API_BASE_URL}/usuarios/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: usuario, senha })
