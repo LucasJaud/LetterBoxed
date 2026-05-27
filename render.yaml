@@ -52,7 +52,7 @@ services:
   # 3. Servidor Frontend Estático (Páginas HTML, CSS e JavaScript SPA)
   - type: web
     name: letterboxed-web
-    env: static
+    runtime: static
     plan: free
     buildCommand: "" # Site estático nativo (sem compilação necessária)
-    publishPath: "."  # Servido diretamente da raiz do projeto (onde está o index.html)
+    staticPublishPath: "."  # Servido diretamente da raiz do projeto (onde está o index.html)
