@@ -12,6 +12,10 @@ export async function initRegistro() {
     if (appHeader) {
         appHeader.className = 'login-header';
     }
+    const nav = document.querySelector('#app-nav');
+    if (nav) {
+        nav.classList.add('nav-hidden');
+    }
 
     const estado = App.state({
         nome: '',

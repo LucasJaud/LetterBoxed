@@ -35,25 +35,8 @@
     font-size: 22px;
     font-weight: bold;
 }
-
-.catalogo-header nav a {
-    margin-left: 15px;
-    text-decoration: none;
-    color: #ccc;
-    transition: 0.3s;
-}
-
-.catalogo-header nav a:hover {
-    color: #f5c518;
-}
-
 .catalogo-header > p {
     display: none;
-}
-
-.catalogo-header nav a.active {
-    color: #f5c518;
-    font-weight: bold;
 }
 
 /* Painel de filtros */

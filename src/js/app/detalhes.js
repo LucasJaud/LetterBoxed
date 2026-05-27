@@ -1,5 +1,6 @@
 import App from '../core/App.js';
 import { API_BASE_URL } from '../core/config.js';
+import { configurarNav } from './nav.js';
 
 export async function initDetalhes() {
     // Carrega o CSS no head para garantir que aplique
@@ -22,6 +23,7 @@ export async function initDetalhes() {
         const filmeId = hash.split('/')[2];
         appContent.innerHTML = detalhesView.template(filmeId);
     }
+    configurarNav('catalogo');
     const appHeader = document.querySelector('#app-header');
     if (appHeader) {
         appHeader.className = 'detalhes-header';

@@ -125,3 +125,65 @@ html, body, .global-body {
 .login-btn-entrar:hover {
     background-color: #ffd54f;
 }
+
+/* GLOBAL NAVIGATION BAR AND HEADER STYLES */
+#app-header {
+    background-color: rgb(0, 0, 0);
+    padding: 15px 30px;
+    border-bottom: 2px solid #f5c518;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+#app-header h1 {
+    background-color: #f5c518;
+    color: #000;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+#app-header p {
+    display: none; /* Oculta subtítulo globalmente ao logar */
+}
+
+/* Exibe subtítulo do cabeçalho apenas na tela de login */
+.login-header p {
+    display: block !important;
+}
+
+#app-nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+#app-nav a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    padding: 6px 14px;
+    border-radius: 6px;
+}
+
+#app-nav a:hover {
+    color: #f5c518;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+#app-nav a.active {
+    color: #000;
+    background-color: #f5c518;
+    box-shadow: 0 0 12px rgba(245, 197, 24, 0.35);
+}
+
+.nav-hidden {
+    display: none !important;
+}
