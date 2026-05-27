@@ -55,4 +55,4 @@ services:
     env: static
     plan: free
     buildCommand: "" # Site estático nativo (sem compilação necessária)
-    publishDir: "."  # Servido diretamente da raiz do projeto (onde está o index.html)
+    publishPath: "."  # Servido diretamente da raiz do projeto (onde está o index.html)
