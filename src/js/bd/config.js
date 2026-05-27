@@ -2,13 +2,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { Sequelize } from 'sequelize';
 
-const dialectOptions = process.env.NODE_ENV === 'production' ? {
-  ssl: {
-    require: true,
-    rejectUnauthorized: false
-  }
-} : {};
-
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'filmes_bd',
   process.env.DB_USER || 'postgres',
@@ -18,7 +11,6 @@ const sequelize = new Sequelize(
     dialect: 'postgres',
     port: process.env.DB_PORT || 5432,
     logging: false, // mude para console.log se quiser ver as queries executadas
-    dialectOptions
   }
 );
 

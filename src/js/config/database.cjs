@@ -13,13 +13,5 @@ const config = {
 
 module.exports = {
   development: config,
-  production: {
-    ...config,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    }
-  }
+  production: config
 };
