@@ -13,6 +13,14 @@
 
 ---
 
+## 🧑‍💻 Grupo 
+
+- Layson Victor **`HTML`**
+- Gabriel Castro **`Javascript + Deploy`**
+- Marcos Lira **`CSS`**
+- Lucas Pedro **`Docker + Migrations`**
+
+
 ## 💻 Sobre o Projeto
 
 O **LetterBoxed** nasceu para resolver a dificuldade de manter um histórico organizado de filmes assistidos. Diferente de redes sociais complexas, nosso sistema oferece um espaço limpo e direto para estudantes de TI registrarem suas opiniões e compararem o "gosto técnico" (baseado nas notas oficiais do TmDB) com o "gosto popular" da sala de aula.
