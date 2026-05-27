@@ -52,6 +52,5 @@ services:
   - type: web
     name: letterboxed-web
     runtime: static
-    plan: free
     buildCommand: "" # Site estático nativo (sem compilação necessária)
     staticPublishPath: "."  # Servido diretamente da raiz do projeto (onde está o index.html)
