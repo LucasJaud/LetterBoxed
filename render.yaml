@@ -6,7 +6,6 @@ databases:
   # 1. Banco de Dados PostgreSQL (Relacional)
   - name: letterboxed-db
     databaseName: filmes_bd
-    user: postgres
     plan: free
 
 services:
