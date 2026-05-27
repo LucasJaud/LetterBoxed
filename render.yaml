@@ -2,14 +2,14 @@
 # Permite fazer o deploy completo da aplicação (Banco de Dados, Backend API e Frontend) com um único clique.
 # Para subir no Render, basta conectar seu repositório no dashboard do Render, e ele detectará este arquivo automaticamente.
 
-services:
+databases:
   # 1. Banco de Dados PostgreSQL (Relacional)
-  - type: database
-    name: letterboxed-db
+  - name: letterboxed-db
     databaseName: filmes_bd
     user: postgres
     plan: free
 
+services:
   # 2. Servidor Backend Node.js / Express
   - type: web
     name: letterboxed-api
