@@ -9,16 +9,8 @@ export const API_BASE_URL = (() => {
         return 'http://localhost:3000';
     }
     
-    // Se estiver no Render, tenta resolver automaticamente:
-    // Se o frontend se chamar "meu-projeto-web.onrender.com",
-    // o backend correspondente na blueprint será "meu-projeto-api.onrender.com".
-    if (hostname.includes('onrender.com')) {
-        return `https://${hostname.replace('-web', '-api')}`;
-    }
-    
-    // Fallback caso usem outros domínios ou nomes customizados
-    // (O usuário pode ajustar esta string para o endereço correto do backend se necessário)
-    return 'https://letterboxed-api.onrender.com';
+    // URL de produção do seu backend no Render (com o sufixo exclusivo gerado pelo Render)
+    return 'https://letterboxed-api-kb48.onrender.com';
 })();
 
 console.log(`[Config] API Base URL configurada como: ${API_BASE_URL}`);
