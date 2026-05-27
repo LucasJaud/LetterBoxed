@@ -7,8 +7,10 @@ const filmesController = new FilmesController();
 
 // Como no server.js usamos "app.use('/filmes', filmesRoutes)", 
 // a rota "/" aqui dentro já representa nativamente "/filmes".
+filmesRotas.get('/seed', (req, res) => filmesController.seed(req, res));
+filmesRotas.post('/seed', (req, res) => filmesController.seed(req, res));
+
 filmesRotas.get('/', authMiddleware, (req, res) => filmesController.listar(req, res));
 filmesRotas.get('/:id', authMiddleware, (req, res) => filmesController.detalhar(req, res));
-filmesRotas.post('/seed', (req, res) => filmesController.seed(req, res));
 
 export default filmesRotas;
